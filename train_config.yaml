@@ -1,0 +1,20 @@
+# OpenWakeWord Training Configuration
+# Customize these settings based on your wake word and dataset
+
+# Dataset configuration
+dataset_dir: dataset
+wakeword_name: hey_mel
+sample_rate: 16000
+
+# Training parameters
+epochs: 40
+batch_size: 32
+learning_rate: 0.001
+
+# Data augmentation (helps improve model robustness)
+augmentation:
+  noise: true
+  pitch_shift: true
+  time_stretch: true
+  random_gain: true
+

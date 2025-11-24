@@ -1,0 +1,13 @@
+openwakeword
+torch
+torchaudio
+onnx
+onnxruntime
+pydub
+numpy
+audiomentations
+chardet
+librosa
+soundfile
+scipy
+
