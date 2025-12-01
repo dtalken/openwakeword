@@ -1,20 +1,44 @@
-# OpenWakeWord Training Configuration
-# Customize these settings based on your wake word and dataset
+# OpenWakeWord Complete Training Configuration
+# Based on required config keys from train.py
 
-# Dataset configuration
-dataset_dir: dataset
-wakeword_name: hey_mel
-sample_rate: 16000
+# Basic model settings
+model_name: "hey_mel"
+target_phrase: "hey mel"
+model_type: "dnn"  # or "rnn" (use dnn for fully connected network)
+output_dir: "models"
+
+# Piper TTS path (required but not used if we skip --generate_clips)
+piper_sample_generator_path: "."  # Current directory as dummy path
+
+# Sample generation settings (for synthetic data - not used with pre-recorded only)
+n_samples: 1000  # Number of training samples to generate (won't actually generate if skipping)
+n_samples_val: 100  # Number of validation samples
+tts_batch_size: 32
+
+# Augmentation paths (create empty lists if not using)
+rir_paths: []  # Room impulse response paths for augmentation
+background_paths: []  # Background noise paths
+background_paths_duplication_rate: []
+
+# Custom negative phrases (for synthetic generation)
+custom_negative_phrases: []
 
 # Training parameters
-epochs: 40
-batch_size: 32
-learning_rate: 0.001
+steps: 500  # Training steps (reduced to avoid validation issues)
+batch_n_per_class:  # Batch size per class (reduced for small dataset)
+  positive: 2
+  adversarial_negative: 2
+layer_size: 96  # Model layer size
+total_length: 42000  # Audio samples (2.625 seconds at 16kHz, gives 24 mel-spec frames)
 
-# Data augmentation (helps improve model robustness)
-augmentation:
-  noise: true
-  pitch_shift: true
-  time_stretch: true
-  random_gain: true
+# Augmentation settings
+augmentation_rounds: 1
+augmentation_batch_size: 256
 
+# Feature data files (will be generated during augmentation)
+feature_data_files: {}
+
+# False positive validation
+false_positive_validation_data_path: null
+target_false_positives_per_hour: 0.5
+max_negative_weight: 10.0
