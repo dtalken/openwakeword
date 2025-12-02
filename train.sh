@@ -57,20 +57,10 @@ if [ -f "models/hey_mel.onnx" ]; then
     echo "Your model is ready:"
     echo "  → models/hey_mel.onnx (ONNX format)"
     echo ""
-    if [ -f "models/hey_mel.tflite" ]; then
-        echo "  → models/hey_mel.tflite (TFLite format)"
-    else
-        echo "Note: TFLite conversion requires additional setup."
-        echo "You can use the ONNX model directly or convert it separately."
-    fi
     echo ""
     echo "Model details:"
     ls -lh models/hey_mel.onnx
     echo ""
-    echo "Next steps:"
-    echo "  1. Test your model (if test script available)"
-    echo "  2. Convert ONNX to TFLite if needed for mobile deployment"
-    echo "  3. Integrate into your application"
 else
     echo ""
     echo "❌ Training failed or model not found!"
