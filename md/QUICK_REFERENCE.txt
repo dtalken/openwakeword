@@ -1,0 +1,121 @@
+╔═══════════════════════════════════════════════════════════════════════╗
+║                  WAV → TFLITE QUICK REFERENCE                         ║
+║                   OpenWakeWord Training Pipeline                      ║
+╚═══════════════════════════════════════════════════════════════════════╝
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ 🚨 GETTING ARCHITECTURE ERRORS? (x86_64/arm64 conflicts)           │
+└─────────────────────────────────────────────────────────────────────┘
+
+You have mixed architecture packages (ARM64 + x86_64 conflict).
+
+THE DEFINITIVE FIX:
+  bash fix_architecture.sh
+  
+This creates a clean virtual environment with matching architectures.
+Takes 5-10 minutes.
+
+See ARCHITECTURE_FIX.md for details.
+
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ 📋 COMPLETE WORKFLOW                                                │
+└─────────────────────────────────────────────────────────────────────┘
+
+1. Setup (ONE TIME - fixes architecture issues):
+   bash fix_architecture.sh
+
+2. ALWAYS activate virtual environment before working:
+   source venv/bin/activate
+   
+   (You'll see "(venv)" in your prompt)
+
+3. Check Dataset:
+   python3 check_dataset.py
+
+4. Normalize Audio:
+   python3 normalize_audio.py
+
+5. Train Model:
+   bash train.sh
+   
+   OR manually:
+   python3 -m openwakeword.train --config train_config.yaml
+
+6. Test Model:
+   python3 test_model.py dataset/positive/sample.wav
+
+7. Deploy:
+   Copy models/hey_mel.tflite to your Flutter app
+
+8. When done:
+   deactivate
+
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ 📁 YOUR CURRENT DATASET STATUS                                      │
+└─────────────────────────────────────────────────────────────────────┘
+
+Positive samples: 5 files ⚠️  (need 50-200 for good accuracy)
+Negative samples: 5 files ⚠️  (need 100-500 for good accuracy)
+
+You can train with this, but accuracy will be poor.
+Recommendation: Add more samples before training.
+
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ 🔧 TROUBLESHOOTING                                                  │
+└─────────────────────────────────────────────────────────────────────┘
+
+Architecture Error:     → See INSTALL_FIX.md
+Module Not Found:       → bash setup_environment.sh
+Training Fails:         → See TROUBLESHOOTING.md
+Poor Accuracy:          → Add more diverse samples
+General Help:           → Read START_HERE.md
+
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ 📚 DOCUMENTATION FILES                                              │
+└─────────────────────────────────────────────────────────────────────┘
+
+START_HERE.md         → Best place to start
+FIXED_SUMMARY.md      → What was fixed and why
+INSTALL_FIX.md        → Fix Apple Silicon issues
+TROUBLESHOOTING.md    → Common problems & solutions
+QUICKSTART.md         → 5-minute setup guide
+README.md             → Complete documentation
+WORKFLOW.md           → Detailed technical workflow
+
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ ⚡ FASTEST PATH TO WORKING MODEL                                    │
+└─────────────────────────────────────────────────────────────────────┘
+
+cd /Users/mac-obs-49/Desktop/train-tflite
+
+bash fix_architecture.sh            # Fix installation (one time, 5-10 min)
+source venv/bin/activate            # Activate environment
+bash train.sh                       # Train model
+python3 test_model.py dataset/positive/HeyMel_TalkenDan_2025-11-04_1.wav
+
+Done! Your model is at: models/hey_mel.tflite
+
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ 📱 FLUTTER DEPLOYMENT                                               │
+└─────────────────────────────────────────────────────────────────────┘
+
+1. Copy: models/hey_mel.tflite → your_flutter_app/assets/models/
+
+2. Update pubspec.yaml:
+   flutter:
+     assets:
+       - assets/models/hey_mel.tflite
+
+3. See README.md for Dart code examples
+
+
+═══════════════════════════════════════════════════════════════════════
+Need help? Read START_HERE.md or TROUBLESHOOTING.md
+═══════════════════════════════════════════════════════════════════════
+
