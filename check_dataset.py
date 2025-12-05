@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """
 Check dataset structure and count audio files
 """
@@ -24,7 +24,7 @@ def check_dataset(root_dir="dataset"):
     else:
         positive_files = [f for f in os.listdir(positive_dir) if f.lower().endswith('.wav')]
         positive_count = len(positive_files)
-        print(f"\n✓ Positive samples: {positive_count} files")
+        print(f"\n[OK] Positive samples: {positive_count} files")
         if positive_count > 0:
             print(f"  Location: {positive_dir}")
             print(f"  Examples: {', '.join(positive_files[:3])}")
@@ -35,7 +35,7 @@ def check_dataset(root_dir="dataset"):
     else:
         negative_files = [f for f in os.listdir(negative_dir) if f.lower().endswith('.wav')]
         negative_count = len(negative_files)
-        print(f"\n✓ Negative samples: {negative_count} files")
+        print(f"\n[OK] Negative samples: {negative_count} files")
         if negative_count > 0:
             print(f"  Location: {negative_dir}")
             print(f"  Examples: {', '.join(negative_files[:3])}")
@@ -55,26 +55,27 @@ def check_dataset(root_dir="dataset"):
     if positive_count < 50:
         print("⚠ Consider adding more positive samples (recommended: 50-200)")
     else:
-        print("✓ Positive sample count looks good")
+        print("[OK] Positive sample count looks good")
     
     if negative_count < 100:
         print("⚠ Consider adding more negative samples (recommended: 100-500)")
     else:
-        print("✓ Negative sample count looks good")
+        print("[OK] Negative sample count looks good")
     
     if positive_count == 0 or negative_count == 0:
-        print("\n❌ Dataset is incomplete! You need both positive and negative samples.")
+        print("\n[ERROR] Dataset is incomplete! You need both positive and negative samples.")
         print("\nNext steps:")
         print("1. Add your wake word WAV files to: dataset/positive/")
         print("2. Add background noise/other speech to: dataset/negative/")
         print("3. Run: python normalize_audio.py")
         print("4. Run this script again to verify")
     else:
-        print("\n✓ Dataset is ready for training!")
+        print("\n[OK] Dataset is ready for training!")
         print("\nNext steps:")
         print("1. Run: python normalize_audio.py")
         print("2. Run: openwakeword-train --config train_config.yaml")
 
 if __name__ == "__main__":
     check_dataset()
+
 

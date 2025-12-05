@@ -1,21 +1,53 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """
 Apply all necessary fixes to openwakeword train.py for small datasets
 """
 import os
 import shutil
 
+# Apply torchaudio compatibility fix before any other imports
+try:
+    import fix_torchaudio_compat
+except ImportError:
+    # If fix_torchaudio_compat.py is not in path, try to patch directly
+    try:
+        import torchaudio
+        if not hasattr(torchaudio, 'list_audio_backends'):
+            def list_audio_backends():
+                backends = []
+                try:
+                    import soundfile
+                    backends.append('soundfile')
+                except ImportError:
+                    pass
+                try:
+                    import soxr
+                    backends.append('sox')
+                except ImportError:
+                    pass
+                return backends
+            torchaudio.list_audio_backends = list_audio_backends
+    except ImportError:
+        pass
+
 def apply_fixes():
     """Apply critical fixes to the openwakeword training code"""
     
-    import openwakeword.train as train_module
+    try:
+        import openwakeword.train as train_module
+    except ImportError as e:
+        print(f"[WARN]  Warning: Could not import openwakeword.train: {e}")
+        print("This is likely due to missing dependencies. Training fixes will be skipped.")
+        print("Please install missing dependencies and try again.")
+        return
+    
     train_file = train_module.__file__
     backup_file = train_file + '.original_backup'
     
     # Backup if not already done
     if not os.path.exists(backup_file):
         shutil.copy2(train_file, backup_file)
-        print(f"✓ Backed up original to: {backup_file}")
+        print(f"[OK] Backed up original to: {backup_file}")
     
     with open(train_file, 'r') as f:
         code = f.read()
@@ -97,13 +129,14 @@ def apply_fixes():
         shutil.rmtree(pycache)
     
     print("=" * 60)
-    print("✓ Applied fixes:")
+    print("[OK] Applied fixes:")
     for fix in fixes_applied:
         print(f"  - {fix}")
     print("=" * 60)
-    print("\n✓ Training code is now patched and ready!")
-    print(f"✓ Original backed up at: {backup_file}")
+    print("\n[OK] Training code is now patched and ready!")
+    print(f"[OK] Original backed up at: {backup_file}")
     
 if __name__ == '__main__':
     apply_fixes()
+
 

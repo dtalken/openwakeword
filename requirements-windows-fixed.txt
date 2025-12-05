@@ -1,0 +1,31 @@
+# Windows Requirements - Tested and Working
+# Use these specific versions to avoid compatibility issues
+
+# Core ML (specific versions to avoid FFmpeg dependency)
+torch==2.6.0
+torchaudio==2.6.0
+
+# Training dependencies
+torchmetrics
+torchinfo
+pronouncing
+
+# Audio processing
+audiomentations
+torch-audiomentations
+mutagen
+acoustics
+matplotlib
+pydub
+scipy
+librosa
+soundfile
+
+# OpenWakeWord
+openwakeword
+speechbrain
+
+# Model formats
+onnx
+onnxruntime
+

@@ -1,11 +1,21 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """
 Audio Normalization Script for OpenWakeWord Training
 Normalizes all WAV files to 16kHz, mono, PCM16 format
 """
 
 import os
-from pydub import AudioSegment
+
+try:
+    # Preferred path: use pydub if it works in this Python version
+    from pydub import AudioSegment  # type: ignore
+    _USE_PYDUB = True
+except Exception:
+    # Fallback: use librosa + soundfile (avoids audioop/pyaudioop issues on 3.13)
+    AudioSegment = None  # type: ignore
+    _USE_PYDUB = False
+    import librosa
+    import soundfile as sf
 
 def normalize_audio_files(root_dir="dataset"):
     """
@@ -23,17 +33,21 @@ def normalize_audio_files(root_dir="dataset"):
             if f.lower().endswith(".wav"):
                 path = os.path.join(folder, f)
                 try:
-                    # Load audio file
-                    audio = AudioSegment.from_file(path)
-                    
-                    # Normalize to 16kHz, mono, 16-bit PCM
-                    audio = audio.set_frame_rate(16000).set_channels(1).set_sample_width(2)
-                    
-                    # Export back to the same file
-                    audio.export(path, format="wav")
+                    if _USE_PYDUB and AudioSegment is not None:
+                        # Load audio file with pydub
+                        audio = AudioSegment.from_file(path)
+                        # Normalize to 16kHz, mono, 16-bit PCM
+                        audio = audio.set_frame_rate(16000).set_channels(1).set_sample_width(2)
+                        # Export back to the same file
+                        audio.export(path, format="wav")
+                    else:
+                        # Librosa + soundfile path (no audioop dependency)
+                        y, sr = librosa.load(path, sr=16000, mono=True)
+                        # Write as 16‑bit PCM WAV
+                        sf.write(path, y, 16000, subtype="PCM_16")
                     
                     processed_count += 1
-                    print(f"✓ Normalized: {path}")
+                    print(f"[OK] Normalized: {path}")
                     
                 except Exception as e:
                     error_count += 1
@@ -48,4 +62,5 @@ def normalize_audio_files(root_dir="dataset"):
 
 if __name__ == "__main__":
     normalize_audio_files()
+
 

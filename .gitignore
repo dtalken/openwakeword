@@ -1,0 +1,52 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Dataset files (can be large)
+dataset/**/*.wav
+dataset/**/*.mp3
+dataset/**/*.m4a
+!dataset/positive/.gitkeep
+!dataset/negative/.gitkeep
+
+# Models (generated)
+models/*.tflite
+models/*.onnx
+models/*.json
+models/*.pb
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+*.log
+

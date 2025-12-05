@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """
 Prepare data structure for OpenWakeWord training when using pre-recorded audio
 """
@@ -39,7 +39,7 @@ def prepare_data():
         else:
             shutil.copy2(file, negative_train / file.name)
     
-    print(f"✓ Data prepared:")
+    print(f"[OK] Data prepared:")
     print(f"  Positive train: {len(list(positive_train.glob('*.wav')))} files")
     print(f"  Positive test:  {len(list(positive_test.glob('*.wav')))} files")
     print(f"  Negative train: {len(list(negative_train.glob('*.wav')))} files")
@@ -47,4 +47,5 @@ def prepare_data():
 
 if __name__ == '__main__':
     prepare_data()
+
 

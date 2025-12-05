@@ -83,6 +83,44 @@ bash install_missing_deps.sh
 
 ---
 
+## Issue 3c: Torchaudio Compatibility Error
+
+### Error:
+```
+AttributeError: module 'torchaudio' has no attribute 'list_audio_backends'
+```
+
+### Cause:
+SpeechBrain 1.0.3 expects `torchaudio.list_audio_backends()` which doesn't exist in some torchaudio versions (like 2.2.2 or 2.9.1+cpu).
+
+### Solution:
+**Option 1: Use the training wrapper (Recommended)**
+```bash
+# Windows
+python train_with_fixes.py --training_config train_config.yaml --augment_clips --overwrite --train_model
+
+# Linux/Mac
+python3 train_with_fixes.py --training_config train_config.yaml --augment_clips --overwrite --train_model
+```
+
+**Option 2: Apply fix manually before training**
+```python
+# In your Python script, import the fix FIRST:
+import fix_torchaudio_compat  # This patches torchaudio automatically
+# Now you can import speechbrain or openwakeword safely
+from openwakeword import train
+```
+
+**Option 3: Run the fix script**
+```bash
+python fix_torchaudio_compat.py
+# Then run your training command normally
+```
+
+The fix automatically adds the missing `list_audio_backends()` function to torchaudio.
+
+---
+
 ## Issue 4: Training Fails - Dataset Issues
 
 ### Error:

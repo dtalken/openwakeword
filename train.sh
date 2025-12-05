@@ -41,11 +41,11 @@ echo "Step 2.6: Applying training fixes..."
 python3 apply_fixes.py
 echo ""
 
-# Step 3: Train model
+# Step 3: Train model (with torchaudio compatibility fix)
 echo "Step 3: Starting training..."
 echo "This may take a while depending on your dataset size and hardware."
 echo ""
-python3 -m openwakeword.train --training_config train_config.yaml --augment_clips --overwrite --train_model
+python3 train_with_fixes.py --training_config train_config.yaml --augment_clips --overwrite --train_model
 
 # Step 4: Convert ONNX to TFLite
 echo ""
